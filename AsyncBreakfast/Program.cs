@@ -7,13 +7,19 @@ namespace AsyncBreakfast
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Began making breakfast.");
+            Console.WriteLine("Began making breakfast at {0:HH:mm:ss}.", DateTime.Now);
+            DateTime start = DateTime.Now;
 
             Egg friedEgg = FryEgg();
             Bread toastedBread = ToastBread();
             Tea madeTea = MakeTea();
 
-            Console.WriteLine("Breakfast ready!");
+            Console.WriteLine("Breakfast ready at {0:HH:mm:ss}", DateTime.Now);
+            DateTime end = DateTime.Now;
+
+            TimeSpan time = end - start;
+
+            Console.WriteLine("The process took {0} seconds.", Math.Round(time.TotalSeconds));
         }
 
 
