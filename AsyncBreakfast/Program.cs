@@ -5,67 +5,46 @@ namespace AsyncBreakfast
 {
     class Program
     {
+        // We need to make main async so that we can 
+        // await something in its body.
+
+        // When a method is async, the method will not wait for the completion
+        // of any tasks in its body. It will start the tasks, then move on with the
+        // rest of the code. If we need to use a return value from that task however,
+        // the function will wait until the task completes and then use that value.
+
+        // We can extract the return value of a task e.g. friedEggTask via
+        // friedEggTask.Result, which will make the method wait until the task completes.
+
+        // We can also wait for a task to complete by using the await keyword, e.g.
+        // 'await friedEggTask' will make the method wait until the task completes.
         static async Task Main(string[] args)
         {
-            Console.WriteLine("Began making breakfast at {0:HH:mm:ss}.", DateTime.Now);
-            DateTime start = DateTime.Now;
+            // Create a kitchen class - this has all our async methods
+            Kitchen kitchen = new Kitchen();
 
-            Task<Egg> friedEggTask = FryEggAsync();
-            Task<Bread> toastedBreadTask = ToastBreadAsync();
-            Task<Tea> madeTeaTask = MakeTeaAsync();
+            // OnFoodMade will now be subscribed to the event FoodMade. OnFoodMade
+            // can be referred to as an event handler; this method is called 
+            // whenever the FoodMade event is invoked.
+            kitchen.FoodMade += kitchen.OnFoodMade;
 
-            Egg friedEgg = await friedEggTask;
-            Console.WriteLine("We now have {0}", friedEgg.Describe());
-
-            Bread toastedBread = await toastedBreadTask;
-            Console.WriteLine("We now have {0}", toastedBread.Describe());
-
-            Tea madeTea = await madeTeaTask;
-            Console.WriteLine("We now have {0}", madeTea.Describe());
-
-            Console.WriteLine("Breakfast ready at {0:HH:mm:ss}", DateTime.Now);
-            DateTime end = DateTime.Now;
-
-            TimeSpan time = end - start;
-
-            Console.WriteLine("The process took {0} seconds.", Math.Round(time.TotalSeconds));
-        }
-
-        // Changing the signature to async, returning Task
-        private static async Task<Egg> FryEggAsync()
-        {
-            Console.WriteLine("Frying egg..");
-
-            // Awaiting a task
-            await Task.Delay(4000);
-
-            Console.WriteLine("Egg fried.");
+            // Start the MakeBreafast task
+            Task makeBreakfastTask = kitchen.MakeBreakfast();
             
-            Egg egg = new Egg();
-            return egg;
+            // UI Thread: We will do this next commit
+            //TalkToUser();
+             
+            // Wait until MakeBreakfast is completed 
+            await makeBreakfastTask;
         }
 
-        private static async Task<Bread> ToastBreadAsync()
+        private static void TalkToUser()
         {
-            Console.WriteLine("Toasting bread..");
-
-            await Task.Delay(2000);
-
-            Console.WriteLine("Bread toasted.");
-            Bread bread = new Bread();
-            return bread;
-        }
-        
-        private static async Task<Tea> MakeTeaAsync()
-        {
-            Console.WriteLine("Making tea...");
-
-            await Task.Delay(6000);
-
-            Console.WriteLine("Tea made.");
-
-            Tea tea = new Tea();
-            return tea;
+            Console.WriteLine("Computer: So, how has your day been?");
+            Console.ReadLine();
+            Console.WriteLine("Computer: Good, good. And how about your family? They okay?");
+            Console.ReadLine();
+            Console.WriteLine("Computer: That's lovely to hear.");
         }
     }
 }
