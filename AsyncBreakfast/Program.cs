@@ -5,14 +5,14 @@ namespace AsyncBreakfast
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             Console.WriteLine("Began making breakfast at {0:HH:mm:ss}.", DateTime.Now);
             DateTime start = DateTime.Now;
 
-            Egg friedEgg = FryEgg();
-            Bread toastedBread = ToastBread();
-            Tea madeTea = MakeTea();
+            Egg friedEggTask = await FryEggAsync();
+            Bread toastedBreadTask = await ToastBreadAsync();
+            Tea madeTeaTask = await MakeTeaAsync();
 
             Console.WriteLine("Breakfast ready at {0:HH:mm:ss}", DateTime.Now);
             DateTime end = DateTime.Now;
@@ -22,29 +22,37 @@ namespace AsyncBreakfast
             Console.WriteLine("The process took {0} seconds.", Math.Round(time.TotalSeconds));
         }
 
-
-        private static Egg FryEgg()
+        // Changing the signature to async, returning Task
+        private static async Task<Egg> FryEggAsync()
         {
             Console.WriteLine("Frying egg..");
-            Task.Delay(2000).Wait();
+
+            // Awaiting a task
+            await Task.Delay(4000);
+
             Console.WriteLine("Egg fried.");
+            
             Egg egg = new Egg();
             return egg;
         }
 
-        private static Bread ToastBread()
+        private static async Task<Bread> ToastBreadAsync()
         {
             Console.WriteLine("Toasting bread..");
-            Task.Delay(2000).Wait();
+
+            await Task.Delay(2000);
+
             Console.WriteLine("Bread toasted.");
             Bread bread = new Bread();
             return bread;
         }
         
-        private static Tea MakeTea()
+        private static async Task<Tea> MakeTeaAsync()
         {
             Console.WriteLine("Making tea...");
-            Task.Delay(2000).Wait();
+
+            await Task.Delay(6000);
+
             Console.WriteLine("Tea made.");
 
             Tea tea = new Tea();

@@ -4,8 +4,11 @@ using System.Text;
 
 namespace AsyncBreakfast
 {
-    class Egg
+    class Egg : Food
     {
-        public bool fried = false;
+        public override string Describe()
+        {
+            return "a delicious egg.";
+        }
     }
 }

@@ -4,7 +4,11 @@ using System.Text;
 
 namespace AsyncBreakfast
 {
-    class Tea
+    class Tea : Food
     {
+        public override string Describe()
+        {
+            return "a piping hot cup of tea.";
+        }
     }
 }
