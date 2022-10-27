@@ -10,9 +10,18 @@ namespace AsyncBreakfast
             Console.WriteLine("Began making breakfast at {0:HH:mm:ss}.", DateTime.Now);
             DateTime start = DateTime.Now;
 
-            Egg friedEggTask = await FryEggAsync();
-            Bread toastedBreadTask = await ToastBreadAsync();
-            Tea madeTeaTask = await MakeTeaAsync();
+            Task<Egg> friedEggTask = FryEggAsync();
+            Task<Bread> toastedBreadTask = ToastBreadAsync();
+            Task<Tea> madeTeaTask = MakeTeaAsync();
+
+            Egg friedEgg = await friedEggTask;
+            Console.WriteLine("We now have {0}", friedEgg.Describe());
+
+            Bread toastedBread = await toastedBreadTask;
+            Console.WriteLine("We now have {0}", toastedBread.Describe());
+
+            Tea madeTea = await madeTeaTask;
+            Console.WriteLine("We now have {0}", madeTea.Describe());
 
             Console.WriteLine("Breakfast ready at {0:HH:mm:ss}", DateTime.Now);
             DateTime end = DateTime.Now;
